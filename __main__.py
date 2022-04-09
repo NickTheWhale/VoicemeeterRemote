@@ -18,9 +18,9 @@ with voicemeeter.remote(kind) as vmr:
         return ver
 
     vmr.apply({
-        'in-0': dict(A1=True)
-        'in-1': dict()
-        'in-2': dict()
+        'in-0': dict(A1=True),
+        'in-1': dict(A1=True),
+        'in-2': dict(A1=True)
     })
 
     print(get_ver())
