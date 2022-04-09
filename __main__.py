@@ -1,3 +1,4 @@
+# import serial
 import voicemeeter
 
 # Can be 'basic', 'banana' or 'potato'
