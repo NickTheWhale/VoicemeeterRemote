@@ -106,10 +106,6 @@ String getDigitalData() {
     if (digital[i].fallingEdge()) {
       dData[i] = !dData[i];
     }
-    // Note Off messages when each button is released
-    if (digital[i].risingEdge()) {
-      //dData[i] = !dData[i];
-    }
   }
   for (int i = 0; i < D_PINS - 1; i++) {
     dataString += String(dData[i]);
@@ -118,3 +114,4 @@ String getDigitalData() {
   dataString += String(dData[D_PINS - 1]);
   return dataString;
 }
+
