@@ -1,5 +1,6 @@
 import serial
 import time
+import io
 import voicemeeter
 
 # Can be 'basic', 'banana' or 'potato'
@@ -11,7 +12,7 @@ kind = 'potato'
 
 with voicemeeter.remote(kind) as vmr:
 
-    arduino = serial.Serial(port='COM15', baudrate=115200, timeout=0.1)
+    arduino = serial.Serial(port='COM7', baudrate=115200, timeout=0)
 
     def get_ver():
         ver = ''
@@ -31,9 +32,21 @@ with voicemeeter.remote(kind) as vmr:
 
     def write_read(x):
         arduino.write(bytes(x, 'utf-8'))
-        time.sleep(0.05)
+        # time.sleep(0.1)
         data = arduino.readline()
         return data
+
+    def read():
+        if arduino.in_waiting > 0:
+            data = arduino.readline()
+        else:
+            data = ""
+        return data
+
+    while False:
+        data = read()
+        if data != "":
+            print(read())
 
     while True:
         num = input("enter a number: ")
