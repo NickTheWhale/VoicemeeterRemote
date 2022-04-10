@@ -36,17 +36,18 @@ with voicemeeter.remote(kind) as vmr:
         data = arduino.readline()
         return data
 
-    def read():
+    def get_arduino_data():
         if arduino.in_waiting > 0:
-            data = arduino.readline()
+            data = arduino.readline().decode('utf-8').rstrip()
         else:
-            data = ""
+            data = -1
         return data
 
-    while False:
+
+    while True:
         data = read()
-        if data != "":
-            print(read())
+        if data != -1:
+            print(data)
 
     while True:
         num = input("enter a number: ")
