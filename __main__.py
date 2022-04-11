@@ -45,7 +45,6 @@ with voicemeeter.remote(kind) as vmr:
     data_lag = []
     for i in range(41):
         data_lag.append("")
-    print(data_lag)
     while True:
         for i in range(6):
             data = get_arduino_data()
