@@ -22,13 +22,11 @@ with voicemeeter.remote(kind) as vmr:
         ver = ver[:-1]
         return ver
 
-
-    def get_input_gain():
+    def get_gain():
         gain = []
         for i in range(4):
             gain.append(vmr.get('Strip[' + str(i+3) + '].Gain'))
         return gain
-
 
     def write_read(x):
         arduino.write(bytes(x, 'utf-8'))
@@ -39,24 +37,27 @@ with voicemeeter.remote(kind) as vmr:
     def get_arduino_data():
         if arduino.in_waiting > 0:
             data = arduino.readline().decode('utf-8').rstrip()
+            data = data.split(',')
         else:
-            data = -1
+            data = ''
         return data
 
 
     while True:
-        data = read()
-        if data != -1:
-            print(data)
+        data = get_arduino_data()
+        data_lag = data
+        if data != '':
+            vmr.set('Strip[1].mute', int(data[-2]))
+            print(data[-2])
 
     while True:
         num = input("enter a number: ")
         value = write_read(num)
         print(value)
 
-    while 1:
+    while True:
         if vmr.dirty:
-            print(get_input_gain())
+            print(get_gain())
 
     vmr.apply({
         'in-0': dict(A1=True, A2=True, A3=True, A4=True, A5=True, B1=True,
