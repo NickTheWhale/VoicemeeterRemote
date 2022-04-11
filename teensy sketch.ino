@@ -10,6 +10,8 @@ const int C = 27;
 const int A_PINS = 14;
 bool dData[D_PINS] = {0};
 
+String dataLag = "";
+
 Bounce digital[] =   {
   Bounce(DIGITAL_PINS[0], BOUNCE_TIME),
   Bounce(DIGITAL_PINS[1], BOUNCE_TIME),
@@ -52,11 +54,12 @@ void setup() {
   for (int i = 0; i < D_PINS; i++) {
     pinMode(DIGITAL_PINS[i], INPUT_PULLUP);
   }
-
 }
 void loop() {
-  String tosend = getAnalogData() + ',' + getDigitalData();
-  Serial.println(tosend);
+  if (dataLag != getAllData()) {
+    dataLag = getAllData();
+    Serial.println(getAllData());
+  }
 }
 
 String getAnalogData() {
@@ -68,7 +71,8 @@ String getAnalogData() {
       digitalWrite(A, HIGH && (i & B00000001));
       digitalWrite(B, HIGH && (i & B00000010));
       digitalWrite(C, HIGH && (i & B00000100));
-      data[i] += analogRead(A0) >> 3;
+      //data[i] += analogRead(A0) >> 3;
+      data[i] += analogRead(A0);
     }
   }
   for (int i = 0; i < iterations; i++) {
@@ -76,17 +80,19 @@ String getAnalogData() {
       digitalWrite(A, HIGH && (i & B00000001));
       digitalWrite(B, HIGH && (i & B00000010));
       digitalWrite(C, HIGH && (i & B00000100));
-      data[i + 8] += analogRead(A1) >> 3;
+      //data[i + 8] += analogRead(A1) >> 3;
+      data[i + 8] += analogRead(A1);
     }
   }
 
   for (int i = 0; i < A_PINS; i++) {
     data[i] /= iterations;
+    data[i] = map(data[i], 0, 1023, -60, 12);
   }
 
   for (int i = 0; i < A_PINS; i++) {
-    int mapVal = (( 1.6 * data[13] ) - .0047 * (data[13] * data[13]));
-
+    //int mapVal = (( 1.6 * data[13] ) - .0047 * (data[13] * data[13]));
+    int mapVal = data[13];
     if (i != 13) {
       dataString += String(data[i]);
       dataString += ',';
@@ -115,3 +121,8 @@ String getDigitalData() {
   return dataString;
 }
 
+String getAllData() {
+  String dataString;
+  dataString = getAnalogData() + ',' + getDigitalData();
+  return dataString;
+}
