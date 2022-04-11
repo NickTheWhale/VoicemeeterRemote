@@ -42,13 +42,18 @@ with voicemeeter.remote(kind) as vmr:
             data = ''
         return data
 
-
+    data_lag = []
+    for i in range(41):
+        data_lag.append("")
+    print(data_lag)
     while True:
-        data = get_arduino_data()
-        data_lag = data
-        if data != '':
-            vmr.set('Strip[1].mute', int(data[-2]))
-            print(data[-2])
+        for i in range(6):
+            data = get_arduino_data()
+            if data != '':
+                if data_lag[i] != int(data[i+8]):
+                    data_lag[i] = int(data[i+8])
+                    vmr.set('Strip[' + str(i) + '].gain', data_lag[i])
+
 
     while True:
         num = input("enter a number: ")
