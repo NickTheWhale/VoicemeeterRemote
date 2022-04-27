@@ -12,7 +12,7 @@ kind = 'potato'
 
 with voicemeeter.remote(kind) as vmr:
 
-    arduino = serial.Serial(port='COM7', baudrate=115200, timeout=0)
+    arduino = serial.Serial(port='COM38', baudrate=115200, timeout=0)
 
     def get_ver():
         ver = ''
